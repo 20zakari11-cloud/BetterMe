@@ -1,0 +1,14 @@
+{
+  "name": "Better Me — رحلة التحول",
+  "short_name": "Better Me",
+  "description": "تحدي 60 يوم لتحسين نفسك",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f0faf0",
+  "theme_color": "#6db56d",
+  "dir": "rtl",
+  "lang": "ar",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
