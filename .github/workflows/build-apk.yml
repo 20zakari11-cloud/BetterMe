@@ -34,7 +34,11 @@ jobs:
         run: npm run build
 
       - name: Install Capacitor
-        run: npm install @capacitor/core@5.7.4 @capacitor/cli@5.7.4 @capacitor/android@5.7.4
+        run: |
+          npm install \
+            @capacitor/core@5.7.4 \
+            @capacitor/cli@5.7.4 \
+            @capacitor/android@5.7.4
 
       - name: Remove JS config
         run: rm -f capacitor.config.js capacitor.config.ts
@@ -55,13 +59,30 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
+      - name: Fix Kotlin conflict
+        run: |
+          cat >> android/build.gradle << 'EOF'
+
+          allprojects {
+              configurations.all {
+                  resolutionStrategy {
+                      force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+                      force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+                      force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+                  }
+              }
+          }
+
+          EOF
+
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
       - name: Build Debug APK
         run: |
           cd android
-          ./gradlew assembleDebug --no-daemon
+          ./gradlew clean
+          ./gradlew assembleDebug --stacktrace --no-daemon
         env:
           JAVA_HOME: ${{ env.JAVA_HOME }}
 
